@@ -1,12 +1,19 @@
-# Load the saved data
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
+
+# Load the saved data from the correct path
 psi_time_evolution_real = np.load('psi_time_evolution_real.npy')
 psi_time_evolution_imag = np.load('psi_time_evolution_imag.npy')
 
 # Reconstruct the complex wave function from its real and imaginary parts
 psi_time_evolution = psi_time_evolution_real + 1j * psi_time_evolution_imag
 
-import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
+# Ensure the global variables are defined or redefined here if necessary
+x_start, x_end, Nx = 0.0, 10.0, 100
+x = np.linspace(x_start, x_end, Nx)
+t_start, t_end, Nt = 0.0, 1.0, 500
+t = np.linspace(t_start, t_end, Nt)
 
 # Function to plot the probability density at specific time points
 def plot_probability_density(x, psi_time_evolution, time_points, t):
@@ -38,11 +45,10 @@ def animate(i):
 # Create the animation
 ani = FuncAnimation(fig, animate, frames=Nt, interval=50)
 
-# To display the animation inline, you would typically use the IPython display utilities
-# However, in this text interface, we cannot directly display the animation.
-# You can use the following code to save the animation as a video or GIF file.
+# Note for environments that do not support inline animation viewing:
+# The animation is saved to a file, which can be downloaded and viewed externally.
 ani.save('wave_packet_evolution.mp4', writer='ffmpeg')
 
-# Provide the path to the saved animation
+# Provide the path to the saved animation for download
 animation_file_path = 'wave_packet_evolution.mp4'
-animation_file_path
+print(animation_file_path)
