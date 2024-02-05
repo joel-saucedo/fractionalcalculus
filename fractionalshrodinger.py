@@ -179,7 +179,6 @@ psi_imag_file_path = 'psi_time_evolution_imag.npy'
 psi_real_file_path, psi_imag_file_path
 
 '''
-
 import numpy as np
 import scipy.sparse as sp
 import scipy.sparse.linalg as splinalg
@@ -232,22 +231,10 @@ for n in range(Nt - 1):
     psi_time_evolution[:, n+1] = psi
 
 # Save the results to files
-np.save('/mnt/data/psi_time_evolution_real.npy', psi_time_evolution.real)
-np.save('/mnt/data/psi_time_evolution_imag.npy', psi_time_evolution.imag)
+np.save('psi_time_evolution_real.npy', psi_time_evolution.real)
+np.save('psi_time_evolution_imag.npy', psi_time_evolution.imag)
 
 # Provide paths to the saved files
-psi_real_file_path = '/mnt/data/psi_time_evolution_real.npy'
-psi_imag_file_path = '/mnt/data/psi_time_evolution_imag.npy'
-
-# Example function to plot probability density (not executable in this environment)
-def plot_probability_density():
-    # This function would create a plot of the probability density
-    pass
-
-# Example function to create an animation (not executable in this environment)
-def create_animation():
-    # This function would create an animation of the wave packet evolution
-    pass
-
-
+psi_real_file_path = 'psi_time_evolution_real.npy'
+psi_imag_file_path = 'psi_time_evolution_imag.npy'
 
