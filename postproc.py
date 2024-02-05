@@ -47,8 +47,9 @@ ani = FuncAnimation(fig, animate, frames=Nt, interval=50)
 
 # Note for environments that do not support inline animation viewing:
 # The animation is saved to a file, which can be downloaded and viewed externally.
-ani.save('wave_packet_evolution.mp4', writer='ffmpeg')
+ani.save('wave_packet_evolution.gif', writer='pillow')
+
 
 # Provide the path to the saved animation for download
-animation_file_path = 'wave_packet_evolution.mp4'
+animation_file_path = 'wave_packet_evolution.gif'
 print(animation_file_path)
