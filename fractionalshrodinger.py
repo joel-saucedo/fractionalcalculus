@@ -1,3 +1,4 @@
+'''
 import numpy as np
 
 # Define the spatial domain
@@ -177,7 +178,76 @@ psi_imag_file_path = 'psi_time_evolution_imag.npy'
 
 psi_real_file_path, psi_imag_file_path
 
+'''
 
+import numpy as np
+import scipy.sparse as sp
+import scipy.sparse.linalg as splinalg
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
+
+# Define the spatial and temporal domains
+x_start, x_end, Nx = 0.0, 10.0, 100
+x = np.linspace(x_start, x_end, Nx)
+dx = (x_end - x_start) / (Nx - 1)
+
+t_start, t_end, Nt = 0.0, 1.0, 500
+t = np.linspace(t_start, t_end, Nt)
+dt = (t_end - t_start) / (Nt - 1)
+
+# Define the initial condition for the wave function at t = 0
+x0, sigma, k0 = x_end / 2, 1.0, 5.0  # Parameters for the Gaussian wave packet
+psi_0 = np.exp(-0.5 * ((x - x0) ** 2) / sigma**2) * np.exp(1j * k0 * x)
+
+# Function to construct the fractional Laplacian matrix (placeholder)
+def construct_fractional_laplacian_matrix(Nx, alpha):
+    # In a real scenario, this would involve a complex implementation
+    A = sp.diags([-2, 1, 1], [0, -1, 1], shape=(Nx, Nx))
+    return A
+
+# Potential function (example: simple harmonic oscillator potential)
+def V(x, t):
+    k = 1.0  # Spring constant
+    return 0.5 * k * x**2
+
+# Initialize variables for the time evolution
+alpha = 1.5  # Fractional order
+A = construct_fractional_laplacian_matrix(Nx, alpha)
+I = sp.eye(Nx)
+psi = psi_0.copy()
+psi_time_evolution = np.zeros((Nx, Nt), dtype=complex)
+psi_time_evolution[:, 0] = psi
+
+# Time-stepping loop
+for n in range(Nt - 1):
+    LHS = (I - 0.5 * dt * A)
+    RHS = (I + 0.5 * dt * A).dot(psi) + dt * V(x, t[n]) * psi
+    # Apply Dirichlet boundary conditions
+    LHS[0, :], LHS[-1, :] = 0, 0
+    LHS[0, 0], LHS[-1, -1] = 1, 1
+    RHS[0], RHS[-1] = 0, 0
+    # Solve the system
+    psi = splinalg.spsolve(LHS, RHS)
+    psi[0], psi[-1] = 0, 0  # Enforce boundary conditions
+    psi_time_evolution[:, n+1] = psi
+
+# Save the results to files
+np.save('/mnt/data/psi_time_evolution_real.npy', psi_time_evolution.real)
+np.save('/mnt/data/psi_time_evolution_imag.npy', psi_time_evolution.imag)
+
+# Provide paths to the saved files
+psi_real_file_path = '/mnt/data/psi_time_evolution_real.npy'
+psi_imag_file_path = '/mnt/data/psi_time_evolution_imag.npy'
+
+# Example function to plot probability density (not executable in this environment)
+def plot_probability_density():
+    # This function would create a plot of the probability density
+    pass
+
+# Example function to create an animation (not executable in this environment)
+def create_animation():
+    # This function would create an animation of the wave packet evolution
+    pass
 
 
 
